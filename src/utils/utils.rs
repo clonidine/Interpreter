@@ -2,6 +2,8 @@ use std::fs;
 
 use regex::Regex;
 
+use crate::token::token::TokenType;
+
 pub fn is_letter(lexeme: &str) -> bool {
     let regex_letter = Regex::new(r"[A-Z]").unwrap();
 
@@ -26,9 +28,24 @@ pub fn get_file_contents(file_path: &str) -> String {
     contents
 }
 
+pub fn get_token_type_name(token_type: TokenType) -> String {
+    let mut token_type_name = String::new();
+
+    match token_type {
+        TokenType::KEYWORD => token_type_name.push_str("KEYWORD"),
+        TokenType::NUMBER => token_type_name.push_str("NUMBER"),
+        TokenType::IDENTIFIER => token_type_name.push_str("IDENTIFIER"),
+    };
+
+    token_type_name
+}
+
 #[cfg(test)]
 mod utils_test {
-    use crate::utils::utils::{get_file_contents, is_digit, is_letter, is_operator};
+    use crate::{
+        token::token::TokenType,
+        utils::utils::{get_file_contents, get_token_type_name, is_digit, is_letter, is_operator},
+    };
 
     #[test]
     fn getting_file_contents_correctly() {
@@ -64,5 +81,16 @@ int c = 50";
         let numbers = ["1234", "-1923", "94.34", "-123.45"];
 
         numbers.iter().for_each(|number| assert!(is_digit(number)))
+    }
+
+    #[test]
+    fn getting_token_type_name_correctly() {
+        let expected_value = "NUMBER";
+
+        let token_type = TokenType::NUMBER;
+
+        let token_type_name = get_token_type_name(token_type);
+
+        assert!(token_type_name.eq(expected_value))
     }
 }
