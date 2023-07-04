@@ -11,13 +11,13 @@ pub fn is_letter(lexeme: &str) -> bool {
 }
 
 pub fn is_digit(lexeme: &str) -> bool {
-    let regex_digit = Regex::new(r"^[-]?\d+(\.\d+)?$").unwrap();
+    let regex_digit = Regex::new(r"^-?\d+(\.\d+)?$").unwrap();
 
     regex_digit.is_match(lexeme)
 }
 
 pub fn is_operator(lexeme: &str) -> bool {
-    let regex_operator = Regex::new(r"[\+\-\*/%=\^&|<>!~]").unwrap();
+    let regex_operator = Regex::new(r"(^|\s|\()([-+*/%=]|[=!<>]=?|\|\||&&)(\s|\)|$)").unwrap();
 
     regex_operator.is_match(lexeme)
 }
@@ -73,8 +73,8 @@ mod utils_test {
         let contents = get_file_contents(&file_path);
 
         let exact_file_content = "int a = 2
-int b = 30
-int c = 50";
+float b = 30.3
+double c = -12.345";
 
         assert!(contents.eq(exact_file_content));
     }

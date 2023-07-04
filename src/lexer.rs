@@ -24,8 +24,8 @@ pub fn tokenize(expressions: &str) -> Vec<Token> {
 fn get_token_type(lexeme: &str) -> TokenType {
     let token_type_mapping: Vec<TokenTypeMapping> = vec![
         TokenTypeMapping {
-            token_type: TokenType::OPERATOR,
-            check_function: is_operator,
+            token_type: TokenType::NUMBER,
+            check_function: is_digit,
         },
         TokenTypeMapping {
             token_type: TokenType::KEYWORD,
@@ -36,8 +36,8 @@ fn get_token_type(lexeme: &str) -> TokenType {
             check_function: is_letter,
         },
         TokenTypeMapping {
-            token_type: TokenType::NUMBER,
-            check_function: is_digit,
+            token_type: TokenType::OPERATOR,
+            check_function: is_operator,
         },
     ];
 
