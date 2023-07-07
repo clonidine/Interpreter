@@ -42,7 +42,6 @@ pub fn get_token_type_name(token_type: &TokenType) -> String {
         TokenType::NUMBER => token_type_name.push_str("NUMBER"),
         TokenType::IDENTIFIER => token_type_name.push_str("IDENTIFIER"),
         TokenType::OPERATOR => token_type_name.push_str("OPERATOR"),
-        TokenType::UNKNOWN => token_type_name.push_str("UNKNOWN"),
     };
 
     token_type_name
@@ -63,21 +62,8 @@ pub fn print_tokens(tokens: &Vec<Token>) {
 mod utils_test {
     use crate::{
         token::token::TokenType,
-        utils::utils::{get_file_contents, get_token_type_name, is_digit, is_letter, is_operator},
+        utils::utils::{get_token_type_name, is_digit, is_letter, is_operator},
     };
-
-    #[test]
-    fn getting_file_contents_correctly() {
-        let file_path = "/home/archlinux/test.pearl";
-
-        let contents = get_file_contents(&file_path);
-
-        let exact_file_content = "int a = 2
-float b = 30.3
-double c = -12.345";
-
-        assert!(contents.eq(exact_file_content));
-    }
 
     #[test]
     fn detecting_operators() {
