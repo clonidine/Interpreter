@@ -22,7 +22,7 @@ pub fn tokenize(expressions: &str) -> Vec<Token> {
 }
 
 fn get_token_type(lexeme: &str) -> TokenType {
-    let token_type_mapping: Vec<TokenTypeMapping> = vec![
+    let token_type_mapping = vec![
         TokenTypeMapping {
             token_type: TokenType::NUMBER,
             check_function: is_digit,
@@ -47,7 +47,7 @@ fn get_token_type(lexeme: &str) -> TokenType {
         }
     }
 
-    TokenType::UNKNOWN
+    panic!("Unknown lexeme.")
 }
 
 fn collect_lexemes(expressions: &str) -> Vec<String> {

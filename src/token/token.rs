@@ -4,7 +4,6 @@ pub enum TokenType {
     NUMBER,
     IDENTIFIER,
     OPERATOR,
-    UNKNOWN,
 }
 pub struct Token {
     token_type: TokenType,
@@ -38,4 +37,3 @@ pub struct TokenTypeMapping<'a> {
     pub token_type: TokenType,
     pub check_function: fn(&'a str) -> bool,
 }
-
