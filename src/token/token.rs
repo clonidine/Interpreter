@@ -5,6 +5,8 @@ pub enum TokenType {
     IDENTIFIER,
     OPERATOR,
 }
+
+#[derive(Debug, PartialEq)]
 pub struct Token {
     token_type: TokenType,
     table_position: usize,
