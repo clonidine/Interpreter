@@ -1,31 +1,49 @@
+use crate::token::token::{Token, TokenType};
+use regex::Regex;
 use std::fs;
 
-use regex::Regex;
-
-use crate::token::token::{Token, TokenType};
-
 pub fn is_letter(lexeme: &str) -> bool {
-    let regex_letter = Regex::new(r"[A-Za-z]").unwrap();
+    let regex_letter = Regex::new(r#"^[a-zA-Z_][a-zA-Z0-9_]*$|\".*\""#).unwrap();
 
     regex_letter.is_match(lexeme)
 }
-
 pub fn is_digit(lexeme: &str) -> bool {
     let regex_digit = Regex::new(r"^-?\d+(\.\d+)?$").unwrap();
 
     regex_digit.is_match(lexeme)
 }
-
 pub fn is_operator(lexeme: &str) -> bool {
     let regex_operator = Regex::new(r"(^|\s|\()([-+*/%=]|[=!<>]=?|\|\||&&)(\s|\)|$)").unwrap();
-
     regex_operator.is_match(lexeme)
 }
 
+pub fn is_string(lexeme: &str) -> bool {
+    let regex_string = Regex::new(r#""[^"]+""#).unwrap();
+    regex_string.is_match(lexeme)
+}
+
+pub fn is_integer(lexeme: &str) -> bool {
+    let regex_integer = Regex::new(r"^[-+]?\d+$").unwrap();
+
+    regex_integer.is_match(lexeme)
+}
+
+pub fn is_floating_point(lexeme: &str) -> bool {
+    let regex_floating_point = Regex::new(r"[+-]?\d+\.\d+([eE][+-]?\d+)?").unwrap();
+
+    regex_floating_point.is_match(lexeme)
+}
+
 pub fn is_keyword(lexeme: &str) -> bool {
-    let keyword_regex = Regex::new(r"\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|opens|package|private|protected|provides|public|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|exports|void|volatile|while|with)\b").unwrap();
+    let keyword_regex = Regex::new(r"\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|opens|package|private|protected|provides|public|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|exports|void|volatile|while|with|str)\b").unwrap();
 
     keyword_regex.is_match(lexeme)
+}
+
+pub fn is_function(lexeme: &str) -> bool {
+    let function_regex = Regex::new(r"").unwrap();
+
+    function_regex.is_match(lexeme)
 }
 
 pub fn get_file_contents(file_path: &str) -> String {
@@ -39,7 +57,10 @@ pub fn get_token_type_name(token_type: &TokenType) -> String {
 
     match token_type {
         TokenType::KEYWORD => token_type_name.push_str("KEYWORD"),
-        TokenType::NUMBER => token_type_name.push_str("NUMBER"),
+        TokenType::INTEGER_LITERAL => token_type_name.push_str("INTEGER_LITERAL"),
+        TokenType::FLOATING_LITERAL => token_type_name.push_str("FLOATING_LITERAL"),
+        TokenType::STRING_LITERAL => token_type_name.push_str("STRING_LITERAL"),
+        TokenType::FUNCTION_DECLARATION => token_type_name.push_str("FUNCTION_DECLARATION"),
         TokenType::IDENTIFIER => token_type_name.push_str("IDENTIFIER"),
         TokenType::OPERATOR => token_type_name.push_str("OPERATOR"),
     };
@@ -50,9 +71,10 @@ pub fn get_token_type_name(token_type: &TokenType) -> String {
 pub fn print_tokens(tokens: &Vec<Token>) {
     tokens.iter().for_each(|token| {
         println!(
-            "TOKEN_TYPE='{}', TABLE_POSITION='{}', VALUE='{}'",
+            "Token(type='{}', start='{}', length='{}', value='{}')",
             get_token_type_name(token.get_token_type()),
-            token.get_table_position(),
+            token.get_start_position(),
+            token.get_len(),
             token.get_value()
         )
     });
@@ -62,8 +84,10 @@ pub fn print_tokens(tokens: &Vec<Token>) {
 mod utils_test {
     use crate::{
         token::token::TokenType,
-        utils::utils::{get_token_type_name, is_digit, is_letter, is_operator},
+        utils::utils::{get_token_type_name, is_operator, is_string},
     };
+
+    use super::{is_floating_point, is_integer};
 
     #[test]
     fn detecting_operators() {
@@ -75,27 +99,38 @@ mod utils_test {
     }
 
     #[test]
-    fn detecting_letter() {
-        let letter = "Hello, World!";
+    fn detecting_string() {
+        let string = r#""Hello, World""#;
 
-        assert!(is_letter(letter))
+        assert!(is_string(string))
     }
 
     #[test]
-    fn detecting_digits() {
-        let numbers = ["1234", "-1923", "94.34", "-123.45"];
+    fn detecting_integer() {
+        let negative_integer = "-123";
+        let positive_integer = "123";
 
-        numbers.iter().for_each(|number| assert!(is_digit(number)))
+        assert!(is_integer(negative_integer));
+        assert!(is_integer(positive_integer))
+    }
+
+    #[test]
+    fn detecting_floating_point() {
+        let numbers = ["123.4", "-123.45"];
+
+        numbers
+            .iter()
+            .for_each(|number| assert!(is_floating_point(number)))
     }
 
     #[test]
     fn getting_token_type_name_correctly() {
-        let expected_value = "NUMBER";
+        let integer_literal = "INTEGER_LITERAL";
 
-        let token_type = TokenType::NUMBER;
+        let token_type = TokenType::INTEGER_LITERAL;
 
-        let token_type_name = get_token_type_name(&token_type);
+        let integer_literal_token_type_name = get_token_type_name(&token_type);
 
-        assert!(token_type_name.eq(expected_value))
+        assert!(integer_literal_token_type_name.eq(integer_literal))
     }
 }
