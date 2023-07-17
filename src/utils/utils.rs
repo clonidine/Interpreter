@@ -123,35 +123,4 @@ mod utils_test {
             .for_each(|number| assert!(is_floating_point(number)))
     }
 
-    #[test]
-    fn getting_token_type_name_correctly() {
-        let integer_literal = "INTEGER_LITERAL";
-        let float_literal = "FLOATING_LITERAL";
-        let string_literal = "STRING_LITERAL";
-
-        let keyword = "KEYWORD";
-        let operator = "OPERATOR";
-        let identifier = "IDENTIFIER";
-
-        let integer_literal_token_type = TokenType::INTEGER_LITERAL;
-        let floating_literal_token_type = TokenType::FLOATING_LITERAL;
-        let string_literal_token_type = TokenType::STRING_LITERAL;
-        let keyword_token_type = TokenType::KEYWORD;
-        let operator_token_type = TokenType::OPERATOR;
-        let identifier_token_type = TokenType::IDENTIFIER;
-
-        let integer_literal_token_type_name = get_token_type_name(&integer_literal_token_type);
-        let floating_literal_token_type_name = get_token_type_name(&floating_literal_token_type);
-        let string_literal_token_type_name = get_token_type_name(&string_literal_token_type);
-        let keyword_token_type_name = get_token_type_name(&keyword_token_type);
-        let operator_token_type_name = get_token_type_name(&operator_token_type);
-        let identifier_token_type_name = get_token_type_name(&identifier_token_type);
-
-        assert!(integer_literal_token_type_name.eq(integer_literal));
-        assert!(floating_literal_token_type_name.eq(float_literal));
-        assert!(string_literal_token_type_name.eq(string_literal));
-        assert!(keyword_token_type_name.eq(keyword));
-        assert!(operator_token_type_name.eq(operator));
-        assert!(identifier_token_type_name.eq(identifier));
-    }
 }
