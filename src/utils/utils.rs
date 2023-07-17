@@ -82,12 +82,7 @@ pub fn print_tokens(tokens: &Vec<Token>) {
 
 #[cfg(test)]
 mod utils_test {
-    use crate::{
-        token::token::TokenType,
-        utils::utils::{get_token_type_name, is_operator, is_string},
-    };
-
-    use super::{is_floating_point, is_integer};
+    use crate::utils::utils::{is_floating_point, is_integer, is_operator, is_string};
 
     #[test]
     fn detecting_operators() {
