@@ -1,5 +1,6 @@
 use crate::token::token::{Token, TokenType};
 use regex::Regex;
+use core::panic;
 use std::fs;
 
 pub fn is_letter(lexeme: &str) -> bool {
@@ -35,7 +36,7 @@ pub fn is_floating_point(lexeme: &str) -> bool {
 }
 
 pub fn is_keyword(lexeme: &str) -> bool {
-    let keyword_regex = Regex::new(r"\b(abstract|assert|boolean|break|byte|case|catch|char|class|const|continue|default|do|double|else|enum|exports|extends|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|module|native|new|opens|package|private|protected|provides|public|requires|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|try|exports|void|volatile|while|with|str)\b").unwrap();
+    let keyword_regex = Regex::new(r"\b(str|int|float|double)\b").unwrap();
 
     keyword_regex.is_match(lexeme)
 }
@@ -52,20 +53,19 @@ pub fn get_file_contents(file_path: &str) -> String {
     contents
 }
 
-pub fn get_token_type_name(token_type: &TokenType) -> String {
-    let mut token_type_name = String::new();
+pub fn get_token_type_name(token_type: &TokenType) -> &str {
 
     match token_type {
-        TokenType::KEYWORD => token_type_name.push_str("KEYWORD"),
-        TokenType::INTEGER_LITERAL => token_type_name.push_str("INTEGER_LITERAL"),
-        TokenType::FLOATING_LITERAL => token_type_name.push_str("FLOATING_LITERAL"),
-        TokenType::STRING_LITERAL => token_type_name.push_str("STRING_LITERAL"),
-        TokenType::FUNCTION_DECLARATION => token_type_name.push_str("FUNCTION_DECLARATION"),
-        TokenType::IDENTIFIER => token_type_name.push_str("IDENTIFIER"),
-        TokenType::OPERATOR => token_type_name.push_str("OPERATOR"),
+        TokenType::KEYWORD => "KEYWORD",
+        TokenType::INTEGER_LITERAL => "INTEGER_LITERAL",
+        TokenType::FLOATING_LITERAL => "FLOATING_LITERAL",
+        TokenType::STRING_LITERAL => "STRING_LITERAL",
+        TokenType::FUNCTION_DECLARATION => "FUNCTION_DECLARATION",
+        TokenType::IDENTIFIER => "IDENTIFIER",
+        TokenType::OPERATOR => "OPERATOR",
     };
-
-    token_type_name
+    
+    panic!("Unexpected error while trying to get token type name")
 }
 
 pub fn print_tokens(tokens: &Vec<Token>) {
